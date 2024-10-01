@@ -1,0 +1,22 @@
+---
+- name: 'Playbook'
+  hosts: nodes
+  become: yes
+
+  tasks:
+    - name: Installing tools
+      apt:
+        package: "{{ item  }}"
+        update_cache: yes
+      with_items:
+        - git
+        - curl
+    
+    - name: Installing docker
+      shell: curl -fsSL get.docker.com -o get-docker.sh && chmod +x get-docker.sh && ./get-docker.sh
+  
+    - name: Add the current user to docker group
+      user:
+        name: ubuntu
+        append: yes
+        groups: docker
